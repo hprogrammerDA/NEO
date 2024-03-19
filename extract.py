@@ -14,25 +14,78 @@ You'll edit this file in Task 2.
 """
 import csv
 import json
-
 from models import NearEarthObject, CloseApproach
 
 
-def load_neos(neo_csv_path):
+def load_neos():
     """Read near-Earth object information from a CSV file.
 
     :param neo_csv_path: A path to a CSV file containing data about near-Earth objects.
     :return: A collection of `NearEarthObject`s.
     """
     # TODO: Load NEO data from the given CSV file.
-    return ()
+    neo_csv_path = 'data/neos'
+    neos_columns = ['pdes', 'name', 'pha', 'diameter']
+    with open(f'{neo_csv_path}.csv', 'r') as infile:
+        reader = csv.DictReader(infile)
+        df = []
+        for row in reader:
+            selection = {column: row[column] for column in neos_columns}
+            df.append(selection)
+    
+    # Instantiating classes of neos and appending to list # 
+    neolist = []
+    for i in range(len(df)):
+        lst = []
+        for key, value in df[i].items():
+            lst.append(value)
+        neo = NearEarthObject(designation = lst[0], name = lst[1], hazardous = lst[2], diameter = lst[3])
+        neolist.append(neo)
 
+    return neolist
 
-def load_approaches(cad_json_path):
+# testing # 
+#neosdata = load_neos()
+#type(neosdata)
+#for i in range(1,5):
+#    print(neosdata[i])
+
+def load_approaches():
     """Read close approach data from a JSON file.
 
     :param cad_json_path: A path to a JSON file containing data about close approaches.
-    :return: A collection of `CloseApproach`es.
+    :return: A collection of `CloseApproach`es. (columns of interest)
     """
     # TODO: Load close approach data from the given JSON file.
-    return ()
+    cad_json_path = 'data/cad'
+    with open(f'{cad_json_path}.json', 'r') as infile:
+        data = json.load(infile)
+    data['fields'] = ['des','cd','dist','v_rel']
+    data['data'] = [[data['data'][i][0], data['data'][i][3],data['data'][i][4], data['data'][i][7]] for i in range(len(data['data']))] #Option: can be adjusted with the loop below
+    
+    calist = []
+    for i in range(len(data['data'])):
+        designation = data['data'][i][0]
+        time = data['data'][i][1]
+        distance = data['data'][i][2]
+        velocity = data['data'][i][3]
+        ca = CloseApproach(_designation = designation, time = time, distance = distance, velocity = velocity)
+        calist.append(ca)
+    
+    return calist
+
+# Testing # 
+#cas = load_approaches('data/cad')
+#for i in range(1,10):
+#    print(cas[i])
+
+
+
+
+
+
+
+
+
+
+

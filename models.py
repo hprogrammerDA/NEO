@@ -33,7 +33,7 @@ class NearEarthObject:
     """
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
-    def __init__(self, designation, name, hazardous, diameter):
+    def __init__(self, designation:str, hazardous:bool, diameter:float, name=None):
         """Create a new `NearEarthObject`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
@@ -43,10 +43,10 @@ class NearEarthObject:
         # You should coerce these values to their appropriate data type and
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
-        self.designation = str(designation)
-        self.name = str(name)
+        self.designation = str(designation) #b
+        self.name = str(name) #b
         self.hazardous = hazardous
-        self.diameter = float(diameter)
+        self.diameter = diameter
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -70,6 +70,8 @@ class NearEarthObject:
             hazard_text = 'is'
         elif self.hazardous == 'Y':
             hazard_text = 'is not'
+        else: 
+            hazard_text = 'is unknown to be/not to be'
         return f"NEO {self.fullname} has a diameter of {self.diameter} km and {hazard_text} potentially hazardous"
 
     def __repr__(self):
@@ -77,8 +79,10 @@ class NearEarthObject:
         return f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, " \
                f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})"
 
-#testing 
-#neo = NearEarthObject(designation = 433, name = 'One REALLY BIG fake asteroid', hazardous = 'N', diameter = 16.840)
+
+# Testing # 
+#neo = NearEarthObject(designation = 433, name = 'One REALLY BIG fake asteroid', hazardous = 'Y', diameter = 16.840)
+#neo = NearEarthObject(designation = 433, hazardous = 'N', diameter = '')
 #print(neo)
 
 
@@ -106,7 +110,7 @@ class CloseApproach:
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
-        self._designation = _designation
+        self._designation = str(_designation) #b
         self.time = cd_to_datetime(time)  # TODO: Use the cd_to_datetime function for this attribute.
         self.distance = float(distance)
         self.velocity = float(velocity)
@@ -138,18 +142,20 @@ class CloseApproach:
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return f"On {self.time_str}, {self._designation} approaches Earth at a distance of {self.distance} au and a velocity of {self.velocity} km/s"
+        return f"At {self.time_str}, object with designation '{self._designation}' approaches Earth at a distance of {self.distance} au and a velocity of {self.velocity} km/s"
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, " \
                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
 
-#ca = CloseApproach(_designation = '2020 FK (one Really BIG fake asteroid)', time = '1900-Jan-01 00:00', distance = 0.25, velocity = 56.78)
+# Testing # 
+ca = CloseApproach(_designation = '2020 FK (one Really BIG fake asteroid)', time = '1900-Jan-01 00:00', distance = 0.25, velocity = 56.78)
+print(ca)
 #print(ca.time_str)
 #print(ca.distance)
 #print(ca.velocity)
-#print(ca)
+
 
 
 

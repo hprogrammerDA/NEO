@@ -11,6 +11,18 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 
 You'll edit this file in Tasks 2 and 3.
 """
+from extract import load_neos, load_approaches
+
+# Testing # 
+"""
+count = 0
+for i in range(1,1000): 
+    for j in range(1,1000):
+        if neos[i].designation == cas[j]._designation:
+            count += 1
+            print(neos[i].designation, cas[j]._designation)
+print(count)
+"""
 
 
 class NEODatabase:
@@ -21,7 +33,7 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
-    def __init__(self, neos, approaches):
+    def __init__(self, neos=None, approaches=None):
         """Create a new `NEODatabase`.
 
         As a precondition, this constructor assumes that the collections of NEOs
@@ -41,10 +53,83 @@ class NEODatabase:
         """
         self._neos = neos
         self._approaches = approaches
+        
 
         # TODO: What additional auxiliary data structures will be useful?
 
         # TODO: Link together the NEOs and their close approaches.
+
+
+
+    """
+    @classmethod
+    def neos_load(cls, filepath_neos):
+        if filepath_neos is None:
+            return None
+        neos = load_neos(filepath_neos)
+        return cls(neos = neos)
+    
+    @classmethod
+    def cas_load(cls, filepath_cas):
+        if filepath_cas is None:
+            return None
+        approaches = load_approaches(filepath_cas)
+        return cls(approaches = approaches)
+    """
+
+# Testing # 
+neosdata = NEODatabase(load_neos(), load_approaches())
+
+count = 0
+for i in range(1,10000):
+    neosdata._neos[i].approaches = []
+    neosdata._approaches[i].approaches = []
+for i in range(1,100):
+    for j in range(1,100):
+        if neosdata._neos[i].designation == neosdata._approaches[j]._designation:
+            neosdata._neos[i].approaches.append(neosdata._approaches[j])
+            neosdata._approaches[j].neo = neosdata._neos[i]
+            print(neosdata._approaches[j].neo)
+            print(neosdata._neos[i])
+            count += 1
+print(count)
+
+for i in range(1,10000):
+    for j in range(1,10000):
+        if neosdata._neos[i].approaches != [] and neosdata._neos[i].designation == neosdata._approaches[j]._designation:
+            print(neosdata._neos[i].designation, neosdata._neos[i].approaches)
+
+for j in range(1,1000): 
+    if neosdata._approaches[j].neo is not None:
+        print(neosdata._approaches[j].neo)
+
+
+
+
+
+
+
+
+# Outated #
+"""
+# Testing - works without approaches # 
+neosdata = NEODatabase.neos_load('data/neos')
+for i in range(1,5):
+    print(neosdata._neos[i])
+# Cas Testing # 
+casdata = NEODatabase.cas_load(filepath_cas = 'data/cad')
+for i in range(1,5):
+    print(casdata._approaches[i])
+
+# Instantiating one class object with both # 
+neodatabase = NEODatabase(neosdata, casdata)
+type(neodatabase._neos)
+for i in range(1,5):
+    print(neodatabase._neos[i])
+"""
+
+            
+
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
