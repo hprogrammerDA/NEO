@@ -12,17 +12,7 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 You'll edit this file in Tasks 2 and 3.
 """
 from extract import load_neos, load_approaches
-
-# Testing # 
-"""
-count = 0
-for i in range(1,1000): 
-    for j in range(1,1000):
-        if neos[i].designation == cas[j]._designation:
-            count += 1
-            print(neos[i].designation, cas[j]._designation)
-print(count)
-"""
+import time
 
 
 class NEODatabase:
@@ -53,84 +43,21 @@ class NEODatabase:
         """
         self._neos = neos
         self._approaches = approaches
+        self.neos_approach_linking()
         
-
-        # TODO: What additional auxiliary data structures will be useful?
-
-        # TODO: Link together the NEOs and their close approaches.
-
-
-
-    """
-    @classmethod
-    def neos_load(cls, filepath_neos):
-        if filepath_neos is None:
-            return None
-        neos = load_neos(filepath_neos)
-        return cls(neos = neos)
-    
-    @classmethod
-    def cas_load(cls, filepath_cas):
-        if filepath_cas is None:
-            return None
-        approaches = load_approaches(filepath_cas)
-        return cls(approaches = approaches)
-    """
-
-# Testing # 
-neosdata = NEODatabase(load_neos(), load_approaches())
-
-count = 0
-for i in range(1,10000):
-    neosdata._neos[i].approaches = []
-    neosdata._approaches[i].approaches = []
-for i in range(1,100):
-    for j in range(1,100):
-        if neosdata._neos[i].designation == neosdata._approaches[j]._designation:
-            neosdata._neos[i].approaches.append(neosdata._approaches[j])
-            neosdata._approaches[j].neo = neosdata._neos[i]
-            print(neosdata._approaches[j].neo)
-            print(neosdata._neos[i])
-            count += 1
-print(count)
-
-for i in range(1,10000):
-    for j in range(1,10000):
-        if neosdata._neos[i].approaches != [] and neosdata._neos[i].designation == neosdata._approaches[j]._designation:
-            print(neosdata._neos[i].designation, neosdata._neos[i].approaches)
-
-for j in range(1,1000): 
-    if neosdata._approaches[j].neo is not None:
-        print(neosdata._approaches[j].neo)
+    # TODO: What additional auxiliary data structures will be useful?
+    # TODO: Link together the NEOs and their close approaches.       
+    def neos_approach_linking(self):
+        neo_dict = {neo.designation: neo for neo in self._neos}
+        #approach_dict = {approach.designation: approach for approach in neosdata._approaches}
+        for approach in self._approaches:
+            if approach._designation in neo_dict:
+                neo = neo_dict[approach._designation]
+                neo.approaches.append(approach)
+                approach.neo = neo
 
 
-
-
-
-
-
-
-# Outated #
-"""
-# Testing - works without approaches # 
-neosdata = NEODatabase.neos_load('data/neos')
-for i in range(1,5):
-    print(neosdata._neos[i])
-# Cas Testing # 
-casdata = NEODatabase.cas_load(filepath_cas = 'data/cad')
-for i in range(1,5):
-    print(casdata._approaches[i])
-
-# Instantiating one class object with both # 
-neodatabase = NEODatabase(neosdata, casdata)
-type(neodatabase._neos)
-for i in range(1,5):
-    print(neodatabase._neos[i])
-"""
-
-            
-
-
+        
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
 
@@ -145,6 +72,9 @@ for i in range(1,5):
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
         # TODO: Fetch an NEO by its primary designation.
+        for neo in self._neos:
+            if neo.designation == designation:
+                return neo
         return None
 
     def get_neo_by_name(self, name):
@@ -162,6 +92,9 @@ for i in range(1,5):
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
+        for neo in self._neos:
+            if neo.name == name:
+                return neo
         return None
 
     def query(self, filters=()):
@@ -180,4 +113,44 @@ for i in range(1,5):
         """
         # TODO: Generate `CloseApproach` objects that match all of the filters.
         for approach in self._approaches:
-            yield approach
+            if approach._designation == filters:
+                return approach
+
+
+# Testing # 
+neosdata = NEODatabase(load_neos('data/neos.csv'), load_approaches('data/cad.json'))
+#print(neosdata._neos[4])
+#print(neosdata._approaches[2])
+neosdata._neos[1].approaches
+#neosdata.get_neo_by_designation('5660')
+neosdata.get_neo_by_name('Lemmon')
+neosdata.get_neo_by_name('Jormungandr')
+
+'''
+# V2, optimized # 
+count = 0
+for i in range(1,10000):
+    neosdata._neos[i].approaches = []
+    neosdata._approaches[i].neo = None
+
+start_time = time.time()
+neo_dict = {neo.designation: neo for neo in neosdata._neos}
+approach_dict = {approach.designation: approach for approach in neosdata._approaches}
+
+for approach in neosdata._approaches:
+    if approach._designation in neo_dict:
+        neo = neo_dict[approach._designation]
+        neo.approaches.append(approach)
+        approach.neo = neo
+        
+        count += 1
+        if count % 50000 == 0:
+            print('Rows Appended:', count) 
+print("Rows appended:", count, "\n", "Execution time:", time.time()-start_time)
+'''
+
+
+
+
+
+

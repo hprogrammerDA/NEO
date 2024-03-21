@@ -43,10 +43,25 @@ class NearEarthObject:
         # You should coerce these values to their appropriate data type and
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
+
         self.designation = str(designation) #b
-        self.name = str(name) #b
-        self.hazardous = hazardous
-        self.diameter = diameter
+
+        if name is None or name == '':
+            self.name = None
+        else:
+            self.name = str(name) #b
+        
+        if hazardous is None or hazardous == '':
+            self.hazardous = False
+        elif hazardous == 'Y':
+            self.hazardous = True
+        else:
+            self.hazardous = False
+        
+        if diameter is None or diameter == '':
+            self.diameter = float('nan')
+        else:
+            self.diameter = float(diameter)
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -66,22 +81,35 @@ class NearEarthObject:
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        if self.hazardous == 'N':
+        if self.hazardous is True: #== 'N':
             hazard_text = 'is'
-        elif self.hazardous == 'Y':
+        elif self.hazardous is False: #== 'Y':
             hazard_text = 'is not'
         else: 
             hazard_text = 'is unknown to be/not to be'
         return f"NEO {self.fullname} has a diameter of {self.diameter} km and {hazard_text} potentially hazardous"
 
+    #def __repr__(self):
+    #    """Return `repr(self)`, a computer-readable string representation of this object."""
+    #    if self.name:
+    #        return f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, " \
+    #            f"diameter={self.diameter!r}, hazardous={self.hazardous!r})" #self.diameter:.3f
+    #    else:
+    #        return f"NearEarthObject(designation={self.designation!r}, name=None, " \
+    #            f"diameter={self.diameter!r}, hazardous={self.hazardous!r})" #self.diameter:.3f
+        
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
-        return f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, " \
-               f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})"
+        if self.name:
+            return "NearEarthObject(designation={!r}, name={!r}, diameter={!r}, hazardous={!r})".format(
+                self.designation, self.name, self.diameter, self.hazardous)
+        else:
+            return "NearEarthObject(designation={!r}, name=None, diameter={!r}, hazardous={!r})".format(
+                self.designation, self.diameter, self.hazardous)
 
 
 # Testing # 
-#neo = NearEarthObject(designation = 433, name = 'One REALLY BIG fake asteroid', hazardous = 'Y', diameter = 16.840)
+#neo = NearEarthObject(designation = 433, name = 'One REALLY BIG fake asteroid', hazardous = False, diameter = 16.840)
 #neo = NearEarthObject(designation = 433, hazardous = 'N', diameter = '')
 #print(neo)
 
@@ -150,8 +178,8 @@ class CloseApproach:
                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
 
 # Testing # 
-ca = CloseApproach(_designation = '2020 FK (one Really BIG fake asteroid)', time = '1900-Jan-01 00:00', distance = 0.25, velocity = 56.78)
-print(ca)
+#ca = CloseApproach(_designation = '2020 FK (one Really BIG fake asteroid)', time = '1900-Jan-01 00:00', distance = 0.25, velocity = 56.78)
+#print(ca)
 #print(ca.time_str)
 #print(ca.distance)
 #print(ca.velocity)
