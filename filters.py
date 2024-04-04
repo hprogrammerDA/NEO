@@ -17,7 +17,9 @@ iterator.
 You'll edit this file in Tasks 3a and 3c.
 """
 import operator
-
+from datetime import datetime
+import time
+import itertools
 
 class UnsupportedCriterionError(NotImplementedError):
     """A filter criterion is unsupported."""
@@ -109,7 +111,76 @@ def create_filters(
     :return: A collection of filters for use with `query`.
     """
     # TODO: Decide how you will represent your filters.
-    return ()
+    filters = []
+
+    if date:
+        def date_filter(approach):
+            return approach.time.date() == date
+        filters.append(date_filter)
+
+    if start_date:
+        def start_filter(approach):
+            return approach.time.date() >= start_date
+        filters.append(start_filter)
+
+    if end_date:
+        def end_filter(approach):
+            return approach.time.date() <= end_date
+        filters.append(end_filter)
+    
+    if distance_min:
+        def distance_min_filter(approach):
+            return approach.distance >= distance_min
+        filters.append(distance_min_filter)
+
+    if distance_max:
+        def distance_max_filter(approach):
+            return approach.distance <= distance_max
+        filters.append(distance_max_filter)
+    
+    if velocity_min:
+        def velocity_min_filter(approach):
+            return approach.velocity >= velocity_min
+        filters.append(velocity_min_filter)
+
+    if velocity_max:
+        def velocity_max_filter(approach):
+            return approach.velocity <= velocity_max
+        filters.append(velocity_max_filter)
+
+    if diameter_min:
+        def diameter_min_filter(approach):
+            return approach.neo.diameter >= diameter_min
+        filters.append(diameter_min_filter)
+
+    if diameter_max:
+        def diameter_max_filter(approach):
+            return approach.neo.diameter <= diameter_max
+        filters.append(diameter_max_filter)
+    
+    if hazardous is not None:
+        if hazardous: 
+            def hazardous_filter(approach):
+                return approach.neo.hazardous == True
+            filters.append(hazardous_filter)
+        else: 
+            def not_hazardous_filter(approach):
+                return approach.neo.hazardous == False
+            filters.append(not_hazardous_filter)
+
+    return filters
+
+
+#Sanity check: 
+'''date1 = '2020-01-01'
+date2 = '2022-01-02'
+date1 = datetime.strptime(date1, '%Y-%m-%d')
+date2 = datetime.strptime(date2, '%Y-%m-%d')
+print(date1.date())
+if date1.date() < date2.date():
+    print('bigger')
+else: 
+    print('smaller')'''
 
 
 def limit(iterator, n=None):
@@ -122,4 +193,8 @@ def limit(iterator, n=None):
     :yield: The first (at most) `n` values from the iterator.
     """
     # TODO: Produce at most `n` values from the given iterator.
-    return iterator
+    if n is None or n ==0:
+        return iterator
+    else:
+        return itertools.islice(iterator, n)
+

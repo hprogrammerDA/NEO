@@ -13,6 +13,7 @@ You'll edit this file in Tasks 2 and 3.
 """
 from extract import load_neos, load_approaches
 import time
+from datetime import datetime
 
 
 class NEODatabase:
@@ -112,19 +113,31 @@ class NEODatabase:
         :return: A stream of matching `CloseApproach` objects.
         """
         # TODO: Generate `CloseApproach` objects that match all of the filters.
+        #for approach in self._approaches:
+        #    if approach._designation == filters:
+        #        return approach
+        
         for approach in self._approaches:
-            if approach._designation == filters:
-                return approach
+            if all(f(approach) for f in filters):
+                yield approach
+
 
 
 # Testing # 
-neosdata = NEODatabase(load_neos('data/neos.csv'), load_approaches('data/cad.json'))
+#neosdata = NEODatabase(load_neos('data/neos.csv'), load_approaches('data/cad.json'))
+#dateexample = neosdata._approaches[2].time
+#print(dateexample.date())               
+
+
 #print(neosdata._neos[4])
-#print(neosdata._approaches[2])
-neosdata._neos[1].approaches
+#print(dateexample)
+#dt_object = datetime.strptime(dateexample, '%Y-%m-%d %H:%M')
+#formatted_date = dt_object.strftime('%Y-%m-%d')
+#print(formatted_date)
+#neosdata._neos[1].approaches
 #neosdata.get_neo_by_designation('5660')
-neosdata.get_neo_by_name('Lemmon')
-neosdata.get_neo_by_name('Jormungandr')
+#neosdata.get_neo_by_name('Lemmon')
+#neosdata.get_neo_by_name('Jormungandr')
 
 '''
 # V2, optimized # 
