@@ -21,6 +21,7 @@ from datetime import datetime
 import time
 import itertools
 
+
 class UnsupportedCriterionError(NotImplementedError):
     """A filter criterion is unsupported."""
 
@@ -40,6 +41,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -75,11 +77,16 @@ class AttributeFilter:
 
 
 def create_filters(
-        date=None, start_date=None, end_date=None,
-        distance_min=None, distance_max=None,
-        velocity_min=None, velocity_max=None,
-        diameter_min=None, diameter_max=None,
-        hazardous=None
+    date=None,
+    start_date=None,
+    end_date=None,
+    distance_min=None,
+    distance_max=None,
+    velocity_min=None,
+    velocity_max=None,
+    diameter_min=None,
+    diameter_max=None,
+    hazardous=None,
 ):
     """Create a collection of filters from user-specified criteria.
 
@@ -113,58 +120,80 @@ def create_filters(
     filters = []
 
     if date:
+
         def date_filter(approach):
             return approach.time.date() == date
+
         filters.append(date_filter)
 
     if start_date:
+
         def start_filter(approach):
             return approach.time.date() >= start_date
+
         filters.append(start_filter)
 
     if end_date:
+
         def end_filter(approach):
             return approach.time.date() <= end_date
+
         filters.append(end_filter)
-    
+
     if distance_min:
+
         def distance_min_filter(approach):
             return approach.distance >= distance_min
+
         filters.append(distance_min_filter)
 
     if distance_max:
+
         def distance_max_filter(approach):
             return approach.distance <= distance_max
+
         filters.append(distance_max_filter)
-    
+
     if velocity_min:
+
         def velocity_min_filter(approach):
             return approach.velocity >= velocity_min
+
         filters.append(velocity_min_filter)
 
     if velocity_max:
+
         def velocity_max_filter(approach):
             return approach.velocity <= velocity_max
+
         filters.append(velocity_max_filter)
 
     if diameter_min:
+
         def diameter_min_filter(approach):
             return approach.neo.diameter >= diameter_min
+
         filters.append(diameter_min_filter)
 
     if diameter_max:
+
         def diameter_max_filter(approach):
             return approach.neo.diameter <= diameter_max
+
         filters.append(diameter_max_filter)
-    
+
     if hazardous is not None:
-        if hazardous: 
+        if hazardous:
+
             def hazardous_filter(approach):
                 return approach.neo.hazardous == True
+
             filters.append(hazardous_filter)
-        else: 
+        else:
+
             def not_hazardous_filter(approach):
                 return approach.neo.hazardous == False
+
             filters.append(not_hazardous_filter)
 
     return filters
@@ -179,8 +208,7 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    if n is None or n ==0:
+    if n is None or n == 0:
         return iterator
     else:
         return itertools.islice(iterator, n)
-

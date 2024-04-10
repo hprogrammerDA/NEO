@@ -24,6 +24,7 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
+
     def __init__(self, neos=None, approaches=None):
         """Create a new `NEODatabase`.
 
@@ -45,7 +46,7 @@ class NEODatabase:
         self._neos = neos
         self._approaches = approaches
         self.neos_approach_linking()
-        
+
     def neos_approach_linking(self):
         neo_dict = {neo.designation: neo for neo in self._neos}
         for approach in self._approaches:
@@ -54,8 +55,6 @@ class NEODatabase:
                 neo.approaches.append(approach)
                 approach.neo = neo
 
-
-        
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
 
@@ -107,15 +106,7 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        
+
         for approach in self._approaches:
             if all(f(approach) for f in filters):
                 yield approach
-
-
-
-
-
-
-
-

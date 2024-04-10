@@ -32,27 +32,27 @@ class NearEarthObject:
     `NEODatabase` constructor.
     """
 
-    def __init__(self, designation:str, hazardous:bool, diameter:float, name=None):
+    def __init__(self, designation: str, hazardous: bool, diameter: float, name=None):
         """Create a new `NearEarthObject`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        self.designation = str(designation) 
+        self.designation = str(designation)
 
-        if name is None or name == '':
+        if name is None or name == "":
             self.name = None
         else:
-            self.name = str(name) 
-        
-        if hazardous is None or hazardous == '':
+            self.name = str(name)
+
+        if hazardous is None or hazardous == "":
             self.hazardous = False
-        elif hazardous == 'Y':
+        elif hazardous == "Y":
             self.hazardous = True
         else:
             self.hazardous = False
-        
-        if diameter is None or diameter == '':
-            self.diameter = float('nan')
+
+        if diameter is None or diameter == "":
+            self.diameter = float("nan")
         else:
             self.diameter = float(diameter)
 
@@ -69,23 +69,24 @@ class NearEarthObject:
 
     def __str__(self):
         """Return `str(self)`."""
-        if self.hazardous is True: 
-            hazard_text = 'is'
-        elif self.hazardous is False: 
-            hazard_text = 'is not'
-        else: 
-            hazard_text = 'is unknown to be/not to be'
+        if self.hazardous is True:
+            hazard_text = "is"
+        elif self.hazardous is False:
+            hazard_text = "is not"
+        else:
+            hazard_text = "is unknown to be/not to be"
         return f"NEO {self.fullname} has a diameter of {self.diameter} km and {hazard_text} potentially hazardous"
-        
+
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         if self.name:
             return "NearEarthObject(designation={!r}, name={!r}, diameter={!r}, hazardous={!r})".format(
-                self.designation, self.name, self.diameter, self.hazardous)
+                self.designation, self.name, self.diameter, self.hazardous
+            )
         else:
             return "NearEarthObject(designation={!r}, name=None, diameter={!r}, hazardous={!r})".format(
-                self.designation, self.diameter, self.hazardous)
-
+                self.designation, self.diameter, self.hazardous
+            )
 
 
 class CloseApproach:
@@ -101,13 +102,14 @@ class CloseApproach:
     private attribute, but the referenced NEO is eventually replaced in the
     `NEODatabase` constructor.
     """
+
     def __init__(self, _designation, time, distance, velocity):
         """Create a new `CloseApproach`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        self._designation = str(_designation) 
-        self.time = cd_to_datetime(time)  
+        self._designation = str(_designation)
+        self.time = cd_to_datetime(time)
         self.distance = float(distance)
         self.velocity = float(velocity)
         self.neo = None
@@ -125,7 +127,7 @@ class CloseApproach:
         formatted string that can be used in human-readable representations and
         in serialization to CSV and JSON files.
         """
-        
+
         return datetime_to_str(self.time)
 
     def __str__(self):
@@ -134,24 +136,21 @@ class CloseApproach:
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
-        return f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, " \
-               f"velocity={self.velocity:.2f}, neo={self.neo!r})"
-    
+        return (
+            f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, "
+            f"velocity={self.velocity:.2f}, neo={self.neo!r})"
+        )
+
     def serialize(self):
+        """Method to make Closeapproach object JSON serializable"""
         return {
-                "datetime_utc": self.time.strftime("%Y-%m-%d %H:%M"),
-                "distance_au": self.distance,
-                "velocity_km_s": self.velocity,
-                "neo": {
+            "datetime_utc": self.time.strftime("%Y-%m-%d %H:%M"),
+            "distance_au": self.distance,
+            "velocity_km_s": self.velocity,
+            "neo": {
                 "designation": self.neo.designation,
                 "name": self.neo.name,
                 "diameter_km": self.neo.diameter,
-                "potentially_hazardous": self.neo.hazardous
-            }
+                "potentially_hazardous": self.neo.hazardous,
+            },
         }
-
-
-
-
-
-

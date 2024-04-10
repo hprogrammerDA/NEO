@@ -25,17 +25,29 @@ def write_to_csv(results, filename):
     :param filename: A Path-like object pointing to where the data should be saved.
     """
     fieldnames = (
-        'datetime_utc', 'distance_au', 'velocity_km_s',
-        'designation', 'name', 'diameter_km', 'potentially_hazardous'
+        "datetime_utc",
+        "distance_au",
+        "velocity_km_s",
+        "designation",
+        "name",
+        "diameter_km",
+        "potentially_hazardous",
     )
 
-    with open(f'results/{filename}', 'w', newline='') as outfile:
-        writer = csv.writer(outfile, lineterminator ='\n')
+    with open(f"results/{filename}", "w", newline="") as outfile:
+        writer = csv.writer(outfile, lineterminator="\n")
         writer.writerow(fieldnames)
         for row in results:
-            row = [row.time, row.distance, row.velocity, row._designation, row.neo.name, row.neo.diameter, row.neo.hazardous]
+            row = [
+                row.time,
+                row.distance,
+                row.velocity,
+                row._designation,
+                row.neo.name,
+                row.neo.diameter,
+                row.neo.hazardous,
+            ]
             writer.writerow(row)
-
 
 
 def write_to_json(results, filename):
