@@ -46,11 +46,8 @@ class NEODatabase:
         self._approaches = approaches
         self.neos_approach_linking()
         
-    # TODO: What additional auxiliary data structures will be useful?
-    # TODO: Link together the NEOs and their close approaches.       
     def neos_approach_linking(self):
         neo_dict = {neo.designation: neo for neo in self._neos}
-        #approach_dict = {approach.designation: approach for approach in neosdata._approaches}
         for approach in self._approaches:
             if approach._designation in neo_dict:
                 neo = neo_dict[approach._designation]
@@ -72,7 +69,6 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        # TODO: Fetch an NEO by its primary designation.
         for neo in self._neos:
             if neo.designation == designation:
                 return neo
@@ -92,7 +88,6 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # TODO: Fetch an NEO by its name.
         for neo in self._neos:
             if neo.name == name:
                 return neo
@@ -112,55 +107,12 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        # TODO: Generate `CloseApproach` objects that match all of the filters.
-        #for approach in self._approaches:
-        #    if approach._designation == filters:
-        #        return approach
         
         for approach in self._approaches:
             if all(f(approach) for f in filters):
                 yield approach
 
 
-
-# Testing # 
-#neosdata = NEODatabase(load_neos('data/neos.csv'), load_approaches('data/cad.json'))
-#dateexample = neosdata._approaches[2].time
-#print(dateexample.date())               
-
-
-#print(neosdata._neos[4])
-#print(dateexample)
-#dt_object = datetime.strptime(dateexample, '%Y-%m-%d %H:%M')
-#formatted_date = dt_object.strftime('%Y-%m-%d')
-#print(formatted_date)
-#neosdata._neos[1].approaches
-#neosdata.get_neo_by_designation('5660')
-#neosdata.get_neo_by_name('Lemmon')
-#neosdata.get_neo_by_name('Jormungandr')
-
-'''
-# V2, optimized # 
-count = 0
-for i in range(1,10000):
-    neosdata._neos[i].approaches = []
-    neosdata._approaches[i].neo = None
-
-start_time = time.time()
-neo_dict = {neo.designation: neo for neo in neosdata._neos}
-approach_dict = {approach.designation: approach for approach in neosdata._approaches}
-
-for approach in neosdata._approaches:
-    if approach._designation in neo_dict:
-        neo = neo_dict[approach._designation]
-        neo.approaches.append(approach)
-        approach.neo = neo
-        
-        count += 1
-        if count % 50000 == 0:
-            print('Rows Appended:', count) 
-print("Rows appended:", count, "\n", "Execution time:", time.time()-start_time)
-'''
 
 
 

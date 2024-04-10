@@ -110,7 +110,6 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
     filters = []
 
     if date:
@@ -171,18 +170,6 @@ def create_filters(
     return filters
 
 
-#Sanity check: 
-'''date1 = '2020-01-01'
-date2 = '2022-01-02'
-date1 = datetime.strptime(date1, '%Y-%m-%d')
-date2 = datetime.strptime(date2, '%Y-%m-%d')
-print(date1.date())
-if date1.date() < date2.date():
-    print('bigger')
-else: 
-    print('smaller')'''
-
-
 def limit(iterator, n=None):
     """Produce a limited stream of values from an iterator.
 
@@ -192,7 +179,6 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
     if n is None or n ==0:
         return iterator
     else:
