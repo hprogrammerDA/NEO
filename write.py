@@ -34,7 +34,7 @@ def write_to_csv(results, filename):
         "potentially_hazardous",
     )
 
-    with open(f"results/{filename}", "w", newline="") as outfile:
+    with open(f"{filename}", "w", newline="") as outfile:
         writer = csv.writer(outfile, lineterminator="\n")
         writer.writerow(fieldnames)
         for row in results:
@@ -61,5 +61,5 @@ def write_to_json(results, filename):
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
     """
-    with open(f"results/{filename}", "w") as outfile:
+    with open(f"{filename}", "w") as outfile:
         json.dump([row.serialize() for row in results], outfile, indent=2)
