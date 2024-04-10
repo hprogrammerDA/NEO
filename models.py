@@ -176,13 +176,21 @@ class CloseApproach:
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, " \
                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
+    
+    def serialize(self):
+        return {
+                "datetime_utc": self.time.strftime("%Y-%m-%d %H:%M"),
+                "distance_au": self.distance,
+                "velocity_km_s": self.velocity,
+                "neo": {
+                "designation": self.neo.designation,
+                "name": self.neo.name,
+                "diameter_km": self.neo.diameter,
+                "potentially_hazardous": self.neo.hazardous
+            }
+        }
 
-# Testing # 
-#ca = CloseApproach(_designation = '2020 FK (one Really BIG fake asteroid)', time = '1900-Jan-01 00:00', distance = 0.25, velocity = 56.78)
-#print(ca)
-#print(ca.time_str)
-#print(ca.distance)
-#print(ca.velocity)
+
 
 
 
