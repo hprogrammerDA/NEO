@@ -48,6 +48,17 @@ class NEODatabase:
         self.neos_approach_linking()
 
     def neos_approach_linking(self):
+        """
+        Method to associate near-Earth objects (NEOs) with their respective approaches
+        
+        Function iterates over the approaches, checks if the designation for each
+        approach matches with any NEO's designation in `neo_dict`, and if so,
+        associates the approach with the corresponding NEO.
+
+        neo_dict (dict): A dictionary mapping NEO designations to NEO objects.
+        approach (approach): An instance of the Approach class representing a close approach to a NEO.
+        neo (NEO): An instance of the NEO class representing a near-Earth object.
+        """
         neo_dict = {neo.designation: neo for neo in self._neos}
         for approach in self._approaches:
             if approach._designation in neo_dict:
