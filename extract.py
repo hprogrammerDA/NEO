@@ -7,8 +7,8 @@ The `load_approaches` function extracts close approach data from a JSON file,
 formatted as described in the project instructions, into a collection of
 `CloseApproach` objects.
 
-The main module calls these functions with the arguments provided at the command
-line, and uses the resulting collections to build an `NEODatabase`.
+The main module calls these functions with the arguments provided at the
+command line, and uses the resulting collections to build an `NEODatabase`.
 
 You'll edit this file in Task 2.
 """
@@ -54,9 +54,8 @@ def load_approaches(cad_json_path):
         data = json.load(infile)
     data["fields"] = ["des", "cd", "dist", "v_rel"]
     data["data"] = [
-        [data["data"][i][0], data["data"][i][3], data["data"][i][4], data["data"][i][7]]
-        for i in range(len(data["data"]))
-    ]  # Option: can be adjusted with the loop below
+        [data["data"][i][0], data["data"][i][3], data["data"][i][4],
+         data["data"][i][7]] for i in range(len(data["data"]))]
 
     calist = []
     for i in range(len(data["data"])):
@@ -65,8 +64,8 @@ def load_approaches(cad_json_path):
         distance = data["data"][i][2]
         velocity = data["data"][i][3]
         ca = CloseApproach(
-            _designation=designation, time=time, distance=distance, velocity=velocity
-        )
+            _designation=designation, time=time,
+            distance=distance, velocity=velocity)
         calist.append(ca)
 
     return calist

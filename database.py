@@ -1,4 +1,5 @@
-"""A database encapsulating collections of near-Earth objects and their close approaches.
+"""A database encapsulating collections of near-Earth objects
+and their close approaches.
 
 A `NEODatabase` holds an interconnected data set of NEOs and close approaches.
 It provides methods to fetch an NEO by primary designation or by name, as well
@@ -50,13 +51,13 @@ class NEODatabase:
     def neos_approach_linking(self):
         """
         Method to associate near-Earth objects (NEOs) with their respective approaches
-        
         Function iterates over the approaches, checks if the designation for each
         approach matches with any NEO's designation in `neo_dict`, and if so,
         associates the approach with the corresponding NEO.
 
         neo_dict (dict): A dictionary mapping NEO designations to NEO objects.
-        approach (approach): An instance of the Approach class representing a close approach to a NEO.
+        approach (approach): An instance of the Approach class representing
+        a close approach to a NEO.
         neo (NEO): An instance of the NEO class representing a near-Earth object.
         """
         neo_dict = {neo.designation: neo for neo in self._neos}

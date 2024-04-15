@@ -75,7 +75,8 @@ class NearEarthObject:
             hazard_text = "is not"
         else:
             hazard_text = "is unknown to be/not to be"
-        return f"NEO {self.fullname} has a diameter of {self.diameter} km and {hazard_text} potentially hazardous"
+        return (f"NEO {self.fullname} has a diameter of "
+                f"{self.diameter} km and {hazard_text} potentially hazardous")
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
@@ -106,7 +107,8 @@ class CloseApproach:
     def __init__(self, _designation, time, distance, velocity):
         """Create a new `CloseApproach`.
 
-        :param info: A dictionary of excess keyword arguments supplied to the constructor.
+        :param info: A dictionary of excess keyword arguments
+        supplied to the constructor.
         """
         self._designation = str(_designation)
         self.time = cd_to_datetime(time)
@@ -132,7 +134,9 @@ class CloseApproach:
 
     def __str__(self):
         """Return `str(self)`."""
-        return f"At {self.time_str}, object with designation '{self._designation}' approaches Earth at a distance of {self.distance} au and a velocity of {self.velocity} km/s"
+        return (f"At {self.time_str}, object with designation '{self._designation}'"
+                f"approaches Earth at a distance of {self.distance} au"
+                f"and a velocity of {self.velocity} km/s")
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
